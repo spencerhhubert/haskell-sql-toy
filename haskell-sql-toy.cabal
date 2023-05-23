@@ -4,6 +4,8 @@ version:            0.1.0.0
 
 executable haskell-sql-toy
     main-is: Server.hs
+    exposed-modules:
+        Sql_parser
     build-depends:
         base ^>=4.16.1.0,
         attoparsec,
