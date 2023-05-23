@@ -34,7 +34,6 @@ main = do
     let json_path = args !! 1
     conn <- open db_path
     execute_ conn "CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY, query TEXT)"
-    execute conn "INSERT INTO history (query) VALUES (?)" (SQL.Only ("test string" :: String))
     raw <- parseJSONFile json_path
     json <- case raw of
         Left err -> error err
@@ -70,6 +69,10 @@ historyHandler :: ActionT Text ConfigM ()
 historyHandler = do
     conn <- lift $ asks db_conn
     queries <- liftIO $ query_ conn "SELECT query FROM history" :: ActionT Text ConfigM [Only String]
-    json $ map fromOnly queries
+    json $ removeDuplicates (map fromOnly queries)
+
+removeDuplicates :: [String] -> [String]
+removeDuplicates [] = []
+removeDuplicates (x:xs) = x : removeDuplicates (filter (/= x) xs)
 
 
