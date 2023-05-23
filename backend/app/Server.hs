@@ -5,7 +5,8 @@ import Data.Either (fromRight)
 import Web.Scotty.Trans
 import Control.Monad.Reader
 import Control.Monad.IO.Class (liftIO)
-import Database.SQLite.Simple (Connection, open)
+import Database.SQLite.Simple (Connection, open, execute, Only, execute_, query_, fromOnly)
+import qualified Database.SQLite.Simple as SQL
 import Data.Text.Lazy (Text, pack, unpack)
 import Sql_parser (parseSQL, parseJSONFile, SpecialList, applySQL)
 import Data.Aeson (encode)
@@ -32,6 +33,8 @@ main = do
     let db_path = args !! 0
     let json_path = args !! 1
     conn <- open db_path
+    execute_ conn "CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY, query TEXT)"
+    execute conn "INSERT INTO history (query) VALUES (?)" (SQL.Only ("test string" :: String))
     raw <- parseJSONFile json_path
     json <- case raw of
         Left err -> error err
@@ -44,6 +47,7 @@ app :: ScottyM ()
 app = do
     get "/" rootHandler
     get "/sql/" sqlHandler --should this be a post? looks annoying with parsing bytestrings
+    get "/history/" historyHandler
 
 rootHandler :: ActionT Text ConfigM () --ActionT that can throw errors of type Text and operations on the monad configm
 rootHandler = do
@@ -57,5 +61,15 @@ sqlHandler = do
     case parsed of
         Left err -> text $ pack err --returns useless errors
         Right val -> do
+            conn <- lift $ asks db_conn
+            liftIO $ execute conn "INSERT INTO history (query) VALUES (?)" (SQL.Only query)
             let result = applySQL val parsed_json 
             json result
+
+historyHandler :: ActionT Text ConfigM ()
+historyHandler = do
+    conn <- lift $ asks db_conn
+    queries <- liftIO $ query_ conn "SELECT query FROM history" :: ActionT Text ConfigM [Only String]
+    json $ map fromOnly queries
+
+
