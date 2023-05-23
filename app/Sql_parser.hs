@@ -24,7 +24,7 @@ import qualified Data.HashMap.Strict as HM
 --
 
 --calls that work
---SELECT *:
+--SELECT *;
 --SELECT * WHERE key = value;
 --SELECT * WHERE ((key = value) AND ((key = value) OR (key = value)));
 --SELECT col,col2 WHERE key = value;
