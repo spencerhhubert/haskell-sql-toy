@@ -16,6 +16,6 @@
 
 in one terminal, `./run_scotty.sh example.json` and another `./run_svelte.sh`
 
-(preferably these would be in a docker compose but it being troublesome)
+(preferably these would be in a docker compose but its being troublesome)
 
 go to `https://localhost:3500`
