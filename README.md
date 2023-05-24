@@ -18,3 +18,4 @@ in one terminal, `./run_scotty.sh` and another `./run_svelte.sh`
 
 (preferably these would be in a docker compose but it being troublesome)
 
+go to `https://localhost:3500`
