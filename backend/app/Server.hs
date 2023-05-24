@@ -11,6 +11,7 @@ import Data.Text.Lazy (Text, pack, unpack)
 import Sql_parser (parseSQL, parseJSONFile, SpecialList, applySQL)
 import Data.Aeson (encode)
 import Network.Wai.Middleware.Cors (simpleCors)
+import qualified Network.HTTP.Types.Status as HTTP
 
 data Config = Config
     {
@@ -60,7 +61,9 @@ sqlHandler = do
     query <- param ("query" :: Text) :: ActionT Text ConfigM Text
     let parsed = parseSQL $ unpack query --show doesn't work, need to unpack. what is a unpack vs a show
     case parsed of
-        Left err -> text $ pack err --returns useless errors
+        Left err -> do
+            status HTTP.badRequest400
+            text $ pack err
         Right val -> do
             conn <- lift $ asks db_conn
             --todo check for duplicates

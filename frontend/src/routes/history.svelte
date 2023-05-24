@@ -15,7 +15,6 @@
         historical_queries = await res.json()
         historical_results = [{}]
         for (let i = 0; i < historical_queries.length; i++) {
-            console.log(historical_queries[i])
             let query = historical_queries[i]
             let result = await getQuery(query)
             historical_results.push(result)
@@ -30,8 +29,9 @@
 <h3>Historical requests:</h3>
 {#each historical_queries as q, i}
     {#if ready}
-        <span>------------------------------------------------------</span>
-        <p>{q}</p>
+        <span>-------------------</span>
+        <span><i>{q}</i></span>
+        <span>-------------------</span>
         <Table json_arr={historical_results[i]} />
     {:else}
         <p>loading...</p>

@@ -1,12 +1,14 @@
 export async function getQuery(query) {
     query = encodeURIComponent(query)
     let res = await fetch(`http://localhost:4000/sql/?query=${query}`)
-    if (!res.ok) {
-        throw new Error(`error: ${res.status}`);
-        return
+    if (res.status === 200) {
+        res = await res.json()
+        return res
+    } else {
+        alert("bad request, sql malformed")
+        return [{}]
     }
-    res = await res.json()
-    return res
+
 }
 
 export function removeFirst(arr) {

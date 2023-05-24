@@ -19,3 +19,5 @@ in one terminal, `./run_scotty.sh example.json` and another `./run_svelte.sh`
 (preferably these would be in a docker compose but its being troublesome)
 
 go to `https://localhost:3500`
+
+![](https://raw.githubusercontent.com/spencerhhubert/haskell-sql-toy/main/assets/what_it_looks_like.png)
