@@ -8,3 +8,16 @@ export async function getQuery(query) {
     res = await res.json()
     return res
 }
+
+export function removeFirst(arr) {
+    if (arr.length > 2) {
+        arr.shift()
+    }
+    if (arr.length == 2) {
+        arr = [[1]]
+    }
+    if (arr.length == 1) {
+        arr = []
+    }
+    return arr
+}

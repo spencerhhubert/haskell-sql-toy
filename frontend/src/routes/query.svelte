@@ -12,5 +12,5 @@
 <h3>Make an SQL query on the JSON file</h3>
 <input id="input_query" type="text" placeholder="sql query" />
 <button on:click={handleSubmit}>Submit</button>
-<h3>Results:</h3>
+<h3>Result:</h3>
 <Table json_arr={result} />

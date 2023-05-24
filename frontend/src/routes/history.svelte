@@ -1,8 +1,9 @@
 <script>
-    import { getQuery } from './functions.js';
-    import { onMount, onDestroy } from 'svelte';
+    import { getQuery, removeFirst } from './functions.js';
+    import { onMount } from 'svelte';
     import Table from './table.svelte';
-    
+
+    let ready = false
     let historical_queries = []
     let historical_results = [{}]
     async function getHistoricalRequests() {
@@ -22,9 +23,17 @@
     }
     onMount(async () => {
         await getHistoricalRequests()
+        historical_results.shift()
+        ready = true
     })
 </script>
 <h3>Historical requests:</h3>
-{#each historical_queries as q}
-    <p>{q}</p>
+{#each historical_queries as q, i}
+    {#if ready}
+        <span>------------------------------------------------------</span>
+        <p>{q}</p>
+        <Table json_arr={historical_results[i]} />
+    {:else}
+        <p>loading...</p>
+    {/if}
 {/each}
