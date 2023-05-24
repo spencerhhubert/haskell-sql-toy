@@ -10,6 +10,8 @@
 - the front end uses Svelte
 
 ## how to run/use:
-`chmod +x run.sh`
-`./run.sh`
-go to `localhost:3000` in the browser
+`chmod +x run_scotty.sh`
+`chmod +x run_svelte.sh`
+in one terminal, `./run_scotty.sh` and another `./run_svelte.sh`
+(preferably these would be in a docker compose but it being troublesome)
+

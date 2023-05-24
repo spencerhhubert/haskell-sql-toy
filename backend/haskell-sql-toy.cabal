@@ -7,7 +7,7 @@ executable haskell-sql-toy
     exposed-modules:
         Sql_parser
     build-depends:
-        base ^>=4.16.1.0,
+        base,
         attoparsec,
         aeson,
         text,
