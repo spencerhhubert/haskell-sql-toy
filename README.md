@@ -14,7 +14,7 @@
 
 `chmod +x run_svelte.sh`
 
-in one terminal, `./run_scotty.sh` and another `./run_svelte.sh`
+in one terminal, `./run_scotty.sh example.json` and another `./run_svelte.sh`
 
 (preferably these would be in a docker compose but it being troublesome)
 
