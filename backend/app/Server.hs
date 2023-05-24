@@ -10,6 +10,7 @@ import qualified Database.SQLite.Simple as SQL
 import Data.Text.Lazy (Text, pack, unpack)
 import Sql_parser (parseSQL, parseJSONFile, SpecialList, applySQL)
 import Data.Aeson (encode)
+import Network.Wai.Middleware.Cors (simpleCors)
 
 data Config = Config
     {
@@ -44,6 +45,7 @@ main = do
 --app needs to be of type ScottyT error type main monad type
 app :: ScottyM ()
 app = do
+    middleware simpleCors
     get "/" rootHandler
     get "/sql/" sqlHandler --should this be a post? looks annoying with parsing bytestrings
     get "/history/" historyHandler
@@ -61,6 +63,7 @@ sqlHandler = do
         Left err -> text $ pack err --returns useless errors
         Right val -> do
             conn <- lift $ asks db_conn
+            --todo check for duplicates
             liftIO $ execute conn "INSERT INTO history (query) VALUES (?)" (SQL.Only query)
             let result = applySQL val parsed_json 
             json result
@@ -69,7 +72,7 @@ historyHandler :: ActionT Text ConfigM ()
 historyHandler = do
     conn <- lift $ asks db_conn
     queries <- liftIO $ query_ conn "SELECT query FROM history" :: ActionT Text ConfigM [Only String]
-    json $ removeDuplicates (map fromOnly queries)
+    json $ removeDuplicates (map fromOnly queries) --should just do this before adding a new query
 
 removeDuplicates :: [String] -> [String]
 removeDuplicates [] = []

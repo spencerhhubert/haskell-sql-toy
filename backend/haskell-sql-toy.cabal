@@ -20,6 +20,7 @@ executable haskell-sql-toy
         base-compat,
         wai-extra,
         stm,
-        http-types
+        http-types,
+        wai-cors
     hs-source-dirs:   app
     default-language: Haskell2010
