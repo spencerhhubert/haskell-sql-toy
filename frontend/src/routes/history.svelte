@@ -1,0 +1,30 @@
+<script>
+    import { getQuery } from './functions.js';
+    import { onMount, onDestroy } from 'svelte';
+    import Table from './table.svelte';
+    
+    let historical_queries = []
+    let historical_results = [{}]
+    async function getHistoricalRequests() {
+        let res = await fetch(`http://localhost:4000/history`)
+        if (!res.ok) {
+            throw new Error(`error: ${res.status}`);
+            return
+        }
+        historical_queries = await res.json()
+        historical_results = [{}]
+        for (let i = 0; i < historical_queries.length; i++) {
+            console.log(historical_queries[i])
+            let query = historical_queries[i]
+            let result = await getQuery(query)
+            historical_results.push(result)
+        }
+    }
+    onMount(async () => {
+        await getHistoricalRequests()
+    })
+</script>
+<h3>Historical requests:</h3>
+{#each historical_queries as q}
+    <p>{q}</p>
+{/each}
