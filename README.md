@@ -1,6 +1,11 @@
 # haskell-sql-toy
 
 ## how to run/use
+### requirements
+- ghc
+- cabal
+- npm
+### run
 `chmod +x run_scotty.sh`
 
 `chmod +x run_svelte.sh`
